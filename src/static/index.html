@@ -1,15 +1,26 @@
 <html>
 <head>
   <title>Chess Video Game Beta</title>
-<!-- link to css
-link to js
-link to jq library -->
+
+  <script type="text/javascript" src="/jquery-3.1.1.min.js"></script> 
+  <link rel="stylesheet" type="text/css" href="/chessboardjs/css/chessboard-0.3.0.min.css">
+  <script type="text/javascript" src="/chessboardjs/js/chessboard-0.3.0.min.js"></script>
+
 </head>
 <body>
 
   <!-- The chess board container  -->
 
+  <div id="board1" style="width: 400px"></div>
+
   <script>
+
+  var board1 = ChessBoard('board1', {
+    pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
+    position: 'start',
+    draggable: true,
+  });
+
   var puzzle = {
     fen: 'k7/5ppp/8/5PPP/8/1K6/8/8 w - -',
     win: [
