@@ -5,20 +5,42 @@
   <script type="text/javascript" src="/jquery-3.1.1.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="/chessboardjs/css/chessboard-0.3.0.min.css">
   <script type="text/javascript" src="/chessboardjs/js/chessboard-0.3.0.min.js"></script>
+  <script type="text/javascript" src="/fetch.js"></script>
 
 </head>
 <body>
 
   <!-- The chess board container  -->
 
-  <div id="board1" style="width: 400px"></div>
+  <div id="board" style="width: 400px"></div>
 
   <script>
 
-  var board1 = ChessBoard('board1', {
+  function onDrop(source, target, piece, newPos) {
+
+    fetch(bestMovePath(newPos))
+      .then(function (response) {
+         return response.json();
+      })
+      .then(function (json) {
+        var move = uciToBoardMove(json.bestmove);
+        board.move(move);
+      });
+  }
+
+  function bestMovePath(position) {
+    return '/bestmove/' + encodeURIComponent(ChessBoard.objToFen(position));
+  }
+
+  function uciToBoardMove(move) {
+    return move.replace(/([a-h][1-8])([a-h][1-8])/, '$1-$2');
+  }
+
+  var board = ChessBoard('board', {
     pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
     position: 'start',
     draggable: true,
+    onDrop: onDrop,
   });
 
   var puzzle = {
