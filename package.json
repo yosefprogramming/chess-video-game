@@ -4,7 +4,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd lib/Stockfish/src && make clean && make profile-build ARCH=x86-64-modern",
+    "build": "cd lib/Stockfish/src && make clean && make build ARCH=x86-64-modern",
     "start": "node src/app.js"
   },
   "license": "UNLICENSED",
