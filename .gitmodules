@@ -1,0 +1,4 @@
+[submodule "lib/Stockfish"]
+	path = lib/Stockfish
+	url = https://github.com/official-stockfish/Stockfish.git
+	ignore = dirty

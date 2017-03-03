@@ -12,7 +12,7 @@ app.get('/bestmove/:fen', (req, res) => {
 
   console.log('The browser is asking me to analyze', req.params.fen)
 
-  const engine = new Engine('/Users/davidyomtobian/Desktop/playground/Stockfish/src/stockfish')
+  const engine = new Engine(join(__dirname, "../lib/Stockfish/src/stockfish"))
   engine
     .chain()
     .init()
@@ -20,6 +20,10 @@ app.get('/bestmove/:fen', (req, res) => {
     .go({ depth: 5 })
     .then(result => {
       res.json({ bestmove: result.bestmove })
+    })
+    .catch(error => {
+      console.log('error occured during analysis:', error)
+      res.sendStatus(500)
     })
 })
 
