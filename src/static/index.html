@@ -17,30 +17,79 @@
 
   <script>
 
-  function onDrop(source, target, piece, newPos) {
+  var levelOne = '8/5ppp/8/5PPP/8/8/1k6/3K4 w - - 0 1';
+  var board;
+  var game = new Chess(levelOne);
 
-    fetch(bestMovePath(newPos))
+  var waitingForComputer = false;
+
+  // do not pick up pieces if the game is over
+  // only pick up pieces for the side to move
+  function onDragStart(source, piece, position, orientation) {
+    if (game.game_over() === true ||
+        (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+        waitingForComputer) {
+      return false;
+    }
+  }
+
+  function onDrop(source, target) {
+
+    // see if the move is legal
+    var move = game.move({
+      from: source,
+      to: target,
+      promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    });
+
+    // illegal move
+    if (move === null) return 'snapback';
+  }
+
+  // update the board position after the piece snap
+  // for castling, en passant, pawn promotion
+  function onSnapEnd() {
+
+    board.position(game.fen());
+
+    waitingForComputer = true;
+
+    fetch(bestMovePath(game.fen()))
       .then(function (response) {
          return response.json();
       })
       .then(function (json) {
-        var move = uciToBoardMove(json.bestmove);
-        board.move(move);
+
+        var move = uciToGameMove(json.bestmove);
+        game.move(move);
+        board.position(game.fen());
+
+        waitingForComputer = false;
       });
   }
 
-  function bestMovePath(position) {
-    return '/bestmove/' + encodeURIComponent(ChessBoard.objToFen(position));
+  function bestMovePath(fen) {
+    return '/bestmove/' + encodeURIComponent(fen);
   }
 
-  function uciToBoardMove(move) {
-    return move.replace(/([a-h][1-8])([a-h][1-8])/, '$1-$2');
+  function uciToGameMove(move) {
+
+    var parts = /([a-h][1-8])([a-h][1-8])([nbrq])?/.exec(move);
+
+    return {
+      from: parts[1],
+      to: parts[2],
+      promotion: parts[3]
+    };
   }
 
   var board = ChessBoard('board', {
     pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
-    position: 'start',
+    position: levelOne,
     draggable: true,
+    onDragStart: onDragStart,
+    onSnapEnd: onSnapEnd,
     onDrop: onDrop,
   });
 
