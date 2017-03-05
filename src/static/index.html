@@ -17,56 +17,73 @@
 
   <script>
 
-  var levelOne = '8/5ppp/8/5PPP/8/8/1k6/3K4 w - - 0 1';
-  var board;
-  var game = new Chess(levelOne);
+  var levels = [
+    '8/5ppp/8/5PPP/8/8/1k6/3K4 w - - 0 1',
+    'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1'
+  ];
 
-  var waitingForComputer = false;
+  play(levels[1]);
 
-  // do not pick up pieces if the game is over
-  // only pick up pieces for the side to move
-  function onDragStart(source, piece, position, orientation) {
-    if (game.game_over() === true ||
-        (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-        (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
-        waitingForComputer) {
-      return false;
-    }
-  }
+  function play(level) {
 
-  function onDrop(source, target) {
+    var game = new Chess(level);
 
-    // see if the move is legal
-    var move = game.move({
-      from: source,
-      to: target,
-      promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    var waitingForComputer = false;
+
+    var board = ChessBoard('board', {
+      pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
+      position: level,
+      draggable: true,
+      onDragStart: onDragStart,
+      onSnapEnd: onSnapEnd,
+      onDrop: onDrop,
     });
 
-    // illegal move
-    if (move === null) return 'snapback';
-  }
+    // do not pick up pieces if the game is over
+    // only pick up pieces for the side to move
+    function onDragStart(source, piece, position, orientation) {
+      if (game.game_over() === true ||
+          (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+          (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+          waitingForComputer) {
+        return false;
+      }
+    }
 
-  // update the board position after the piece snap
-  // for castling, en passant, pawn promotion
-  function onSnapEnd() {
+    function onDrop(source, target) {
 
-    board.position(game.fen());
-
-    waitingForComputer = true;
-
-    fetch(bestMovePath(game.fen()))
-      .then(function (response) {
-         return response.json();
-      })
-      .then(function (json) {
-
-        var move = uciToGameMove(json.bestmove);
-        game.move(move);
-        board.position(game.fen());
-
-        waitingForComputer = false;
+      // see if the move is legal
+      var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen for example simplicity
       });
+
+      // illegal move
+      if (move === null) return 'snapback';
+    }
+
+    // update the board position after the piece snap
+    // for castling, en passant, pawn promotion
+    function onSnapEnd() {
+
+      board.position(game.fen());
+
+      waitingForComputer = true;
+
+      fetch(bestMovePath(game.fen()))
+        .then(function (response) {
+           return response.json();
+        })
+        .then(function (json) {
+
+          var move = uciToGameMove(json.bestmove);
+          game.move(move);
+          board.position(game.fen());
+
+          waitingForComputer = false;
+        });
+    }
   }
 
   function bestMovePath(fen) {
@@ -83,15 +100,6 @@
       promotion: parts[3]
     };
   }
-
-  var board = ChessBoard('board', {
-    pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
-    position: levelOne,
-    draggable: true,
-    onDragStart: onDragStart,
-    onSnapEnd: onSnapEnd,
-    onDrop: onDrop,
-  });
 
   </script>
 </body>
