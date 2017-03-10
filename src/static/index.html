@@ -1,31 +1,50 @@
 <html>
 <head>
   <title>Chess Video Game Beta</title>
-
   <script type="text/javascript" src="/jquery-3.1.1.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="/chessboardjs/css/chessboard-0.3.0.min.css">
   <script type="text/javascript" src="/chessboardjs/js/chessboard-0.3.0.min.js"></script>
   <script type="text/javascript" src="/chess.js"></script>
   <script type="text/javascript" src="/fetch.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="/index.css"></link>
 </head>
 <body>
 
   <!-- The chess board container  -->
-
-  <div id="board" style="width: 400px"></div>
+  <div id="level"></div>
+  <div id="board"></div>
 
   <script>
 
   var levels = [
+    '2K5/2P1k3/8/8/8/1r6/8/3R4 w - - 0 1',
+    '8/1p2r2p/p4k2/1b1K1p2/1P1Pp3/4P1PP/1P3B2/R7 b - - 0 1',
+    '3r1r1k/ppb3pB/1qn4p/3p2N1/2pP4/P1P3Pb/1PQB1R1P/4R1K1 w - - 0 1',
+    '3b4/6k1/6pp/Pp1pPp2/2pP1P2/2B3P1/5K1P/8 w - - 0 1',
+    'r4k2/1p4nR/1n1p1p1N/p1p1pPp1/4P3/1P1P1N2/P1P2KP1/8 w - - 0 1',
+    '4q1k1/1p1r1pp1/7p/Q2R4/P7/8/1Pr2PPP/3R2K1 w - - 0 1',
+    '3r3r/pkp2ppp/3b1n2/7q/1PP5/P3BP1b/3NBP1P/R2QK2R w - - 0 1',
+    '3R4/k7/2K5/2P5/8/6r1/8/8 b - - 0 1',
+    '2b5/1p6/1p1kpN2/3pN3/3Pp2R/2p1P3/rr6/2K2R2 w - - 0 1',
+    '8/pp5p/8/4k1p1/6P1/P3K2P/1P6/8 w - - 0  1',
+    '2b5/1p2k3/1p2p2N/3pN3/2pPp2R/4P3/rr6/2K2R2 w - - 0 1',
     '8/5ppp/8/5PPP/8/8/1k6/3K4 w - - 0 1',
     'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1',
-    '2k5/8/2K3R1/8/8/8/8/8 w - - 0 1'
+    '2k5/8/2K3R1/8/8/8/8/8 w - - 0 1',
+    '2K5/2P1k3/8/8/8/1r6/8/3R4 w - - 0 1'
+
   ];
 
-  var levelIndex = 0;
+  var levelIndex = -1;
+  
+  playNext()
+  
+  function playNext() {
+    levelIndex++
+    $('#level').text("LEVEL "+(levelIndex+1))
+    play(levels[levelIndex]);
 
-  play(levels[levelIndex]);
+  }
 
   function play(level) {
 
@@ -36,6 +55,7 @@
     var board = ChessBoard('board', {
       pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
       position: level,
+      orientation: game.turn() === 'w' ? 'white':'black', 
       draggable: true,
       onDragStart: onDragStart,
       onSnapEnd: onSnapEnd,
@@ -81,7 +101,7 @@
         .then(function (json) {
 
           if (json.bestmove === "(none)") {
-            play(levels[++levelIndex]);
+            playNext();
             return;
           }
 

@@ -17,7 +17,7 @@ app.get('/bestmove/:fen', (req, res) => {
     .chain()
     .init()
     .position(req.params.fen)
-    .go({ depth: 5 })
+    .go({ depth: 15 })
     .then(result => {
       res.json({ bestmove: result.bestmove })
     })
