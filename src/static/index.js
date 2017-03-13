@@ -51,6 +51,8 @@ function playNext() {
 
 function play(level) {
 
+  var sourceSquare;
+
   var game = new Chess(level);
 
   var waitingForComputer = false;
@@ -65,19 +67,40 @@ function play(level) {
     onDrop: onDrop,
   });
 
+  $('.square-55d63').on('click', onSquareClick);
+
   // do not pick up pieces if the game is over
   // only pick up pieces for the side to move
   function onDragStart(source, piece, position, orientation) {
+
     if (game.game_over() === true ||
         (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
         (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
         waitingForComputer) {
       return false;
-
     }
+
+    sourceSquare = source;
+  }
+
+  function onSquareClick(event) {
+
+    var targetSquare = $(this).attr('data-square');
+
+    if (tryMove(sourceSquare, targetSquare)) {
+      onSnapEnd();
+    }
+
   }
 
   function onDrop(source, target) {
+    if (!tryMove(source, target)) {
+      // illegal move
+      return 'snapback';
+    }
+  }
+
+  function tryMove(source, target) {
 
     // see if the move is legal
     var move = game.move({
@@ -86,8 +109,7 @@ function play(level) {
       promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
 
-    // illegal move
-    if (move === null) return 'snapback';
+    return move !== null;
   }
 
   // update the board position after the piece snap
