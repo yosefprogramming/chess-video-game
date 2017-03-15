@@ -51,6 +51,17 @@ function playNext() {
 
 function play(level) {
 
+  function PlaySound() {
+          var sound = document.getElementById("audio");
+          sound.play()
+}
+
+
+  window.playOtherSide = function playOtherSide() {
+    board.flip();
+    onSnapEnd();
+  };
+
   var sourceSquare;
 
   var game = new Chess(level);
@@ -144,7 +155,9 @@ function play(level) {
   function onEngineEnd() {
 
     if (game.game_over()){ 
-      $('#level').text("Game Over") 
+      $('#level').text("Game Over");
+      PlaySound() 
+       
     }
   }
 }
