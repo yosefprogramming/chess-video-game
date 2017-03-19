@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "initialize": "git submodule update --init --recursive && npm run build && npm install",
     "build": "cd lib/Stockfish/src && make clean && make build ARCH=x86-64-modern",
     "start": "node src/app.js"
   },
