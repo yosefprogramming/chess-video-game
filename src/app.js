@@ -17,13 +17,15 @@ app.get('/bestmove/:fen', (req, res) => {
     .chain()
     .init()
     .position(req.params.fen)
-    .go({ depth: 15 })
+    .go({ depth: 16 })
     .then(result => {
       res.json({ bestmove: result.bestmove })
+      engine.quit()
     })
     .catch(error => {
       console.log('error occured during analysis:', error)
       res.sendStatus(500)
+      engine.quit()
     })
 })
 
