@@ -177,7 +177,7 @@ function play(level) {
       })
       .then(function (json) {
 
-        if (json.bestmove === "(none)") {
+        if (json.bestmove === "(none)" || json.yosefinfo < -4600 ) {
           playNext();
           return;
         }
