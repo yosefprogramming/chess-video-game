@@ -19,7 +19,7 @@ app.get('/bestmove/:fen', (req, res) => {
     .position(req.params.fen)
     .go({ depth: 16 })
     .then(result => {
-      res.json({ bestmove: result.bestmove })
+      res.json({ bestmove: result.bestmove, yosefinfo: result.info[6].score.value, davidinfo: result.info[15].score.value } )
       engine.quit()
     })
     .catch(error => {
