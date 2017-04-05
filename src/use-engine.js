@@ -50,7 +50,10 @@ const normalizedScores = evaluations => evaluations.map((e, i) => {
   return { unit: score.unit, value: value };
 });
 
-const isSignificant = (a, b) => a.value - b.value > -125;
+
+
+const isSignificant = (a, b, threshold) => a.value - b.value > threshold;
+
 
 const extractLevels = pgn => {
   const fens = pgnToFens(pgn);
@@ -60,8 +63,10 @@ const extractLevels = pgn => {
       debugger;
       const levels = [];
       for (var i = 0; i < scores.length - 1; i += 2) {
-        if (isSignificant(scores[i], scores[i + 1])) {
-          levels.push(`${fens[i]} is a significant position: ${scores[i]} -> ${scores[i + 1]}`);
+        if (isSignificant(scores[i], scores[i + 1], 175)) {
+
+           levels.push(`${fens[i]} is a significant position: ${JSON.stringify(scores[i])} -> ${JSON.stringify(scores[i + 1])}`);
+
         }
       }
       return levels;
