@@ -24,7 +24,7 @@ var levels = [
 //'4k3/p1r2p1p/1p4p1/4q3/8/1N4PP/PP5K/2R1R3 b - - 0 1',
 // 'championship level''5rk1/6q1/b5Q1/pp1pR3/3p4/3P1N2/PPP2K2/8 w - - 0 1' ,
 //'not for humans''1r6/k7/pb6/2B5/P7/8/8/KR6 w - - 0 1',
-'3k3r/8/3p1p2/3Pb3/4R1B1/8/8/5K2 b - - 0 1',
+//'3k3r/8/3p1p2/3Pb3/4R1B1/8/8/5K2 b - - 0 1',
 '6k1/5b1p/8/6Pn/8/5B2/8/K5R1 w - - 0 1',
 '2kn4/2pp4/3b4/2q5/BQ6/8/3R4/1K6 w - - 0 1',
 '7k/8/8/3b1q2/5Q1B/6PN/6PK/4r3 b - - 0 1',
