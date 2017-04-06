@@ -11,6 +11,7 @@ var levels = [
 '8/8/5pbb/3Knk2/3R3P/4P3/6P1/8 w - - 0 1',
 '6R1/8/7r/5rpk/1R6/5bPN/7K/8 w - - 0 1',
 '7Q/p1p1b1B1/6r1/2p3kp/4Bp1q/7P/PPP2PP1/6K1 w - - 0 1',
+//10
 'r4rk1/pp4Bp/8/1P4pq/2PQPpn1/6P1/P1N1PPK1/R4R2 b - - 0 1',
 '8/1kp4R/1p5R/P3q3/KPP2B2/1P2P3/5P2/8 b - - 0 1',
 //'r1bqk2r/pppp1ppp/2P1p3/8/1b6/6P1/PP1PPP1P/R1BQKB1R w KQkq - 0 1',
@@ -30,16 +31,16 @@ var levels = [
 '7k/8/8/3b1q2/5Q1B/6PN/6PK/4r3 b - - 0 1',
 '4q3/1p4k1/4p1pp/p1R1Pp1n/1pQ4B/1P4PK/P7/3r4 w - - 0 1',
   '8/8/2K2Bp1/1p5p/p4k2/2P5/P7/8 w - - 0 1',
-  'rn6/kp3p1p/pq6/N1Q5/P7/7P/5PP1/3R2K1 w - - 0 1',
+//20  
+'rn6/kp3p1p/pq6/N1Q5/P7/7P/5PP1/3R2K1 w - - 0 1',
   '7k/pp2rRbp/1np1q1p1/3pN3/3P4/2P3QP/PP4PB/6K1 w - - 0 1',
   //'3r1rk1/2q2pp1/p5nR/1pn1PR1Q/2p5/2P1P2P/P1B2K2/2B5 w - - 0 1',
-//5 
 // '6k1/r6p/pp1p2p1/2pP2q1/P1Pb4/4B3/1P1Q2PP/5RK1 w - - 0 1',
  '8/8/2pk2p1/8/8/7P/P5P1/6K1 w - - 0 1',
  'r1b2k1r/pp3ppp/1q1n4/8/8/2N1R3/PPPQ2PP/4R1K1 w - - 0 1',
   '8/8/4p3/8/3P4/1k1K4/p7/4R3 w - - 0 1',
   '1qn5/k5p1/p7/Pp6/2P1Q3/4R1PP/6BK/3r4 w - - 0 1',
-//10
+//26
   '2bq1nkb/2p4p/2pp3Q/r4NpN/p2PP3/2P5/PP4PP/5RK1 w - - 0 1',
   '8/6k1/p1pp2p1/P2n3p/1P6/1B4PP/6K1/8 w - - 0 1', 
   '1R3b2/5k1p/1P6/4Bpp1/1r2p3/4P3/5P1P/7K w - - 0 1',
@@ -49,16 +50,17 @@ var levels = [
   'R7/K4k2/P7/8/8/8/8/1r6 w - - 0 1',
   '1n6/p3q2p/2pNk3/1pP1p3/1P2P2Q/2P3P1/6K1/8 w - - 0 1',
   '2b4k/2p1q1pp/1pP5/p7/5r2/P1Q2B1P/5PP1/3R2K1 w - - 0 1',
-//19   '8/8/4p3/8/3P4/8/pk1K4/7R w - - 0 1',
-  '6k1/4bp1p/p2p1p2/q4R2/8/2r5/P1PQ2PP/1R5K b - - 0 1',
+//35   
+  '8/8/4p3/8/3P4/8/pk1K4/7R w - - 0 1',
+  //'6k1/4bp1p/p2p1p2/q4R2/8/2r5/P1PQ2PP/1R5K b - - 0 1',
   // 21 '4q1k1/1p1r1pp1/7p/Q2R4/P7/8/1Pr2PPP/3R2K1 w - - 0 1',
   // 22 '3r3r/pkp2ppp/3b1n2/7q/1PP5/P3BP1b/3NBP1P/R2QK2R w - - 0 1',
   'r1bq1k1r/pp2n2p/1bpp3p/3Pp2B/4P3/1QP2N2/P2N1PPP/R4RK1 w KQkq - 0 1',
   // '3R4/k7/2K5/2P5/8/6r1/8/8 b - - 0 1',
-  //24 '8/3kr3/p1q1p2p/1p2R2P/2p3Q1/2P5/PP1p1PP1/6K1 b - - 0 1',
+  '8/3kr3/p1q1p2p/1p2R2P/2p3Q1/2P5/PP1p1PP1/6K1 b - - 0 1',
   'r1b1k1q1/1p4b1/p3p1Pn/2pp2r1/P5B1/1PN3Q1/1BPP4/2K2R1R w - - 0 26',
   '5k1r/p4pp1/2r3np/3b2b1/3BN3/3B3P/PP4P1/2R2R1K w - - 0 27',
-  //27 'q2rrk2/1b4pQ/p7/3pP3/1b3P2/3B3R/6PP/2R3K1 w - - 0 1',
+  'q2rrk2/1b4pQ/p7/3pP3/1b3P2/3B3R/6PP/2R3K1 w - - 0 1',
   'r1bq1k1r/ppp2Bpp/2np4/4n1N1/3bPB2/2NP4/PPPK2PP/R2Q1R2 w - - 0 12',
   //29 '6k1/p1rb4/1p1p4/1P1Pp3/4Pp1b/1Q1N1Pq1/P5BR/6K1 b - - 0 1',
   '4rrk1/p5pp/1p1ppn2/7q/2PP4/PQ4P1/3NPPK1/4RR2 b - - 0 19',
@@ -73,7 +75,7 @@ var levels = [
   '8/6p1/3N2k1/3NK3/8/8/b5PP/8 w - - 0 1', 
   '6K1/6P1/5k2/8/8/6r1/7R/8 w - - 0 1',
   // move to easy '8/5ppp/8/5PPP/8/8/1k6/3K4 w - - 0 1',
-  // move to easy 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1',
+  'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1',
   //42
   '2k5/8/2K3R1/8/8/8/8/8 w - - 0 1',
   '2K5/2P1k3/8/8/8/1r6/8/3R4 w - - 0 1',
