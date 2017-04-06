@@ -124,8 +124,12 @@ function play(level) {
   function PlaySound() {
           var sound = document.getElementById("audio");
           sound.play()
-}
+  }
 
+  var subliminalIntervalId = null;
+  window.subliminalLearning = function () {
+    subliminalIntervalId = setInterval(onSnapEnd, 2500);
+  }
 
   window.playOtherSide = function playOtherSide() {
     board.flip();
@@ -209,6 +213,7 @@ function play(level) {
       .then(function (json) {
 
         if (json.bestmove === "(none)" || json.info < -5200 ) {
+          clearInterval(subliminalIntervalId);
           playNext();
           return;
         }
