@@ -111,7 +111,7 @@ var levels = [
 
 var levelIndex = -1;
 
-playNext()
+playNext();
 
 function playNext() {
 
@@ -120,6 +120,7 @@ function playNext() {
   $('#level').text("LEVEL "+(levelIndex+1))
   play(levels[levelIndex]);
 }
+
 
 function play(level) {
 
@@ -132,6 +133,7 @@ function play(level) {
   window.subliminalLearning = function () {
     subliminalIntervalId = setInterval(onSnapEnd, 2500);
   }
+  
 
   window.playOtherSide = function playOtherSide() {
     board.flip();
@@ -216,7 +218,7 @@ function play(level) {
 
         if (json.bestmove === "(none)" || json.info < -5200 ) {
           clearInterval(subliminalIntervalId);
-          playNext();
+          window.setTimeout(playNext,1200);
           return;
         }
 
