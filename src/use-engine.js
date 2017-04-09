@@ -1,14 +1,6 @@
 const engines = require('./engine-pool');
 const { Chess } = require('chess.js');
 
-const pendingId = setInterval(function () {
-  const p = engines.pending;
-  if (p === 0) {
-    clearInterval(pendingId);
-  }
-  console.error(p)  
-}, 500);
-
 function pgnToFens(pgn) {
 
    // brand new game
@@ -36,13 +28,13 @@ function pgnToFens(pgn) {
 }
 
 const evaluateFen = fen => engines
-  .acquire() //request to the pool 
+  .acquire()
   .then(engine => engine
     .position(fen)
     .go({ depth: 20 })
     .then(result => {
       engines.release(engine);
-      return { fen: fen, evaluation: result }; // final resoultion of outer promise.
+      return { fen: fen, evaluation: result };
     }));
 
 const evaluateFens = fens => Promise.all(fens.map(evaluateFen));
@@ -56,6 +48,7 @@ const normalize = positions => positions.map((position, i) => {
   const value = deepest.value * (i % 2 ? 1 : -1); // normalize sign
 
   return { fen, unit, value };
+
 });
 
 const isSignificant = (a, b, cpThreshold) => {
@@ -70,31 +63,45 @@ const isSignificant = (a, b, cpThreshold) => {
 };
 
 const includeSignificance = positions => {
-      // add significance
-      for (let i = 0; i < positions.length - 1; i++) {
-        positions[i].isSignificant = isSignificant(
-          positions[i],
-          positions[i + 1],
-          100);
-      }
-      return positions;
+
+  for (let i = 0; i < positions.length - 1; i++) {
+    positions[i].isSignificant = isSignificant(
+      positions[i],
+      positions[i + 1],
+      100);
+  }
+
+  return positions;
+
+};
+
+const extractLevels = pgn =>
+  evaluateFens(pgnToFens(pgn))
+    .then(normalize)
+    .then(includeSignificance);
+
+const main = () => {
+
+  // read the pgn file specified on the command line
+  const pgnPath = process.argv[2];
+  const fs = require('fs');
+  const pgn = fs.readFileSync(pgnPath, "utf-8");
+  console.log(pgn)
+
+  // print the number of pending engine clients until 0
+  const pendingId = setInterval(function () {
+    const p = engines.pending;
+    console.error(p);
+    if (p === 0) {
+      clearInterval(pendingId);
     }
+  }, 500);
 
-const extractLevels = pgn => evaluateFens(pgnToFens(pgn))
-  .then(normalize)
-  .then(includeSignificance);
+  // extract levels from the specified pgn
+  extractLevels(pgn).then(levels => {
+    console.log(levels);
+  });
 
+};
 
-const pgnPath = process.argv[2];
-
-const fs = require('fs');
-const pgn = fs.readFileSync(pgnPath, "utf-8");
-
-console.log(pgn)
-
-extractLevels(pgn).then(levels => {
-  console.log(levels);
-});
-
-
-
+main();
