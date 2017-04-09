@@ -2,9 +2,12 @@ const engines = require('./engine-pool');
 const { Chess } = require('chess.js');
 
 const pendingId = setInterval(function () {
-  console.error(engines.pending);
-}, 1000);
-
+  const p = engines.pending;
+  if (p === 0) {
+    clearInterval(pendingId);
+  }
+  console.error(p)  
+}, 500);
 
 function pgnToFens(pgn) {
 
@@ -33,44 +36,54 @@ function pgnToFens(pgn) {
 }
 
 const evaluateFen = fen => engines
-  .acquire()
+  .acquire() //request to the pool 
   .then(engine => engine
     .position(fen)
     .go({ depth: 20 })
     .then(result => {
       engines.release(engine);
-      return { fen: fen, evaluation: result };
+      return { fen: fen, evaluation: result }; // final resoultion of outer promise.
     }));
 
 const evaluateFens = fens => Promise.all(fens.map(evaluateFen));
 
-const normalizedScores = evaluations => evaluations.map((e, i) => {
-  const score = e.info[e.info.length - 1].score;
-  const value = score.value * (i % 2 ? 1 : -1);
-  return { unit: score.unit, value: value };
+const normalize = positions => positions.map((position, i) => {
+
+  const fen = position.fen;
+  const info = position.evaluation.info;
+  const deepest = info[info.length - 1].score;
+  const unit = deepest.unit;
+  const value = deepest.value * (i % 2 ? 1 : -1); // normalize sign
+
+  return { fen, unit, value };
 });
 
-
-
-const isSignificant = (a, b, threshold) => a.value - b.value > threshold;
-
-
-const extractLevels = pgn => {
-  const fens = pgnToFens(pgn);
-  return evaluateFens(fens)
-    .then(evaluations => {
-      const scores = normalizedScores(evaluations.map(e => e.evaluation));
-      const levels = [];
-      for (var i = 0; i < scores.length - 1; i += 2) {
-        if (isSignificant(scores[i], scores[i + 1], 175)) {
-
-           levels.push(`${fens[i]} is a significant position: ${JSON.stringify(scores[i])} -> ${JSON.stringify(scores[i + 1])}`);
-
-        }
-      }
-      return levels;
-    });
+const isSignificant = (a, b, cpThreshold) => {
+  // comparing cp
+  if (a.unit === 'cp' && b.unit === 'cp') {
+    return Math.abs(b.value - a.value) >= cpThreshold;
+  }
+  // being close to 0 in mating is the "highest score"
+  // so a change from 1 -> -1 is the biggest jump you can make (unlike cp where that is the smallest)
+  // in mating, the extremes are close (-20 -> 20) even though, that's kind of a hard comparison to make
+  return null; // null means "I don't know"
 };
+
+const includeSignificance = positions => {
+      // add significance
+      for (let i = 0; i < positions.length - 1; i++) {
+        positions[i].isSignificant = isSignificant(
+          positions[i],
+          positions[i + 1],
+          100);
+      }
+      return positions;
+    }
+
+const extractLevels = pgn => evaluateFens(pgnToFens(pgn))
+  .then(normalize)
+  .then(includeSignificance);
+
 
 const pgnPath = process.argv[2];
 
@@ -81,5 +94,7 @@ console.log(pgn)
 
 extractLevels(pgn).then(levels => {
   console.log(levels);
-  clearInterval(pendingId);
 });
+
+
+
