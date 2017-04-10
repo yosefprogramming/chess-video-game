@@ -108,6 +108,7 @@ var levels = [
 
 
 ];
+var losingMusic=['tooeasytaunt.mp4','/audio/gameover.128.mp3'];
 
 var levelIndex = -1;
 
@@ -217,6 +218,8 @@ function play(level) {
       .then(function (json) {
 
         if (json.bestmove === "(none)" || json.info < -5200 ) {
+          var audio = new Audio('abcd.mp4');
+          audio.play();
           clearInterval(subliminalIntervalId);
           window.setTimeout(playNext,1200);
           return;
@@ -236,7 +239,8 @@ function play(level) {
 
     if (game.game_over()){ 
       $('#level').text("Game Over");
-      PlaySound() 
+       var audio = new Audio(losingMusic[Math.floor(Math.random() * (1+1))]);
+          audio.play();
       // inserted to play sound at end of lose screen
       // has not been committed to git  
     }
