@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { join } = require("path")
 const { Engine } = require("node-uci")
 const morgan = require("morgan")
@@ -28,6 +30,8 @@ app.get('/bestmove/:fen', (req, res) => {
       engine.quit()
     })
 })
+
+require('./passport')(app);
 
 app.listen(8000, () => {
   console.log("I'm listening")
