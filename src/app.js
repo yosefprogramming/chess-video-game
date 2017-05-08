@@ -10,6 +10,12 @@ app.use(morgan('dev'))
 
 app.use(express.static(join(__dirname, "static")))
 
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
+require('./passport')(app);
+
 app.get('/bestmove/:fen', (req, res) => {
 
   console.log('The browser is asking me to analyze', req.params.fen)
@@ -30,8 +36,6 @@ app.get('/bestmove/:fen', (req, res) => {
       engine.quit()
     })
 })
-
-require('./passport')(app);
 
 app.listen(8000, () => {
   console.log("I'm listening")
