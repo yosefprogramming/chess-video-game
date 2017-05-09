@@ -7,8 +7,9 @@ const localStrategy = new Strategy((username, password, cb) => {
   db.query('SELECT * FROM users WHERE username = $1;', [ username ])
     .then(([ user ]) => {
       console.log('received response from postgres query', user);
-      if (!user) { cb(null, false); }
+      if (!user) {return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
+      return cb(null,user)
     })
     .catch(err => {
       console.error('failed to select user for authentication', err);
@@ -20,6 +21,7 @@ const localStrategy = new Strategy((username, password, cb) => {
 passport.use(localStrategy);
 
 passport.serializeUser((user, cb) => {
+  debugger;  
   cb(null, user.id);
 });
 
